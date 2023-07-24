@@ -10,8 +10,7 @@ int main(int ac, char **argv)
 	size_t bytes;
 	ssize_t bytes_read;
 	char **arguments;
-	char *input;
-	char *prompt;
+	char *input, *prompt, *command, *end, *savedptr;
 
 	(void)ac;
 	input = NULL;
@@ -26,11 +25,22 @@ int main(int ac, char **argv)
 
 		if (bytes_read == -1)/* checks if reached EOF or CTRL + D is pressed */
 			break;
-
-		arguments = get_tokens(input, bytes_read, arguments); /*getting the tokens*/
-
-
-		execute_commands(arguments);
+		command = strtok_r(input, ";", &savedptr);
+		while (command != NULL)
+		{
+			while (*command && (*command == ' ' || *command == '\t'))
+				command++;
+			end = command + _strlen(command) - 1;
+			while (end > command && (*end == ' ' || *end == '\t' || *end == '\n'))
+				end--;
+			*(end + 1) = '\0';
+			if (*command != '\0')
+			{
+				arguments = get_tokens(command, _strlen(command), arguments);
+				execute_commands(arguments);
+			}
+			command = strtok_r(NULL, ";", &savedptr);
+		}
 
 	}
 	free(input);
