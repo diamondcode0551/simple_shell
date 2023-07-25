@@ -53,14 +53,6 @@ typedef struct mybuiltin
         void (*functions)(char **);
 } mybuiltin;
 
-
-/* Environment */
-void env(char **arr __attribute__ ((unused)));
-int _setenv(const char *name, const char *value, int overwrite);
-void _unsetenv(char **arr);
-
-int shellby_setenv(char **args, char __attribute__((__unused__)) **front);
-
 /* Environment help */
 int _putchar(char c);
 void _puts(char *str);
@@ -69,5 +61,9 @@ char *_concats(char *first, char *second, char *third);
 
 /* custom_library_functions */
 ssize_t _getline(char **input);
+
+void split_commands(char *input, char **arguments);
+void execute_command(char *command, char **arguments);
+char *_strdup(char *str);
 
 #endif
