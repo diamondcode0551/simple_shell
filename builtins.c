@@ -6,19 +6,27 @@
  */
 int exit_builtin(char **arguments)
 {
-	int status;
+	int exit_code;
+	char *error_message;
 
-	if (arguments[1])
+	if (arguments[0] != NULL && strcmp(arguments[0], "exit") == 0)
 	{
-		status = _atoi(arguments[1]);
-		exit(status);
+		if (arguments[1] != NULL)
+		{
+			exit_code = _atoi(arguments[1]);
+			if (exit_code != 0 || arguments[1][0] == '0')
+				exit(exit_code);
+			else
+				exit(1);
+		}
+		else
+			exit(0);
 	}
-	else
-	{
-		exit(0);
-	}
+	error_message = "shell: command not found\n";
+	write(2, error_message, strlen(error_message));
+
+	return (1);
 }
-
 /**
  * env_builtin - displays the environment
  * @arguments: commands
@@ -75,72 +83,46 @@ int help_builtin(char **arguments)
  */
 int cd_builtin(char **arguments)
 {
-    char *info = NULL;
-    char *home_dir = NULL;
-    char prev_dir[1024];
-    char *error_message;
+	char prev_dir[1024];
+	char *home_dir, *info;
 
-    if (arguments[1] == NULL || (_strcmp(arguments[1], "~") == 0))
-    {
-        home_dir = _getenv("HOME");
-        if (home_dir == NULL)
-        {
-            error_message = "cd: No HOME directory found.\n";
-            write(STDERR_FILENO, error_message, _strlen(error_message));
-            return 0;
-        }
-        arguments[1] = home_dir;
-    }
-
-    if (_strcmp(arguments[1], "-") == 0)
-    {
-        info = _getenv("OLDPWD");
-        if (info == NULL)
-        {
-            error_message = "cd: OLDPWD not set.\n";
-            write(STDERR_FILENO, error_message, _strlen(error_message));
-            return 0;
-        }
-        else
-        {
-	        write(STDOUT_FILENO, info, _strlen(info));
-            write(STDOUT_FILENO, "\n", 1);
-            // Change to the previous directory
-            if (chdir(info) != 0)
-            {
-                perror("chdir");
-                return 0;
-            }
-            // Update PWD to the current working directory
-            char current_dir[1024];
-            if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-            {
-                perror("getcwd");
-                return 0;
-            }
-            setenv("PWD", current_dir, 1);
-            return 1;
-        }
-    }
-    else
-    {
-        info = getcwd(prev_dir, sizeof(prev_dir));
-        if (info == NULL)
-        {
-            perror("getcwd");
-            return 0;
-        }
-
-        if (chdir(arguments[1]) != 0)
-        {
-            perror("cd");
-            return 0;
-        }
-
-        setenv("OLDPWD", prev_dir, 1);
-        setenv("PWD", info, 1);
-        return 1;
-    }
+	if (!arguments[1] || _strcmp(arguments[1], "~") == 0)
+	{
+		home_dir = _getenv("HOME");
+		if (!home_dir)
+		{
+			write(STDERR_FILENO, "cd: No HOME directory found.\n", 29);
+			return (0);
+		}
+		arguments[1] = home_dir;
+	}
+	if (_strcmp(arguments[1], "-") == 0)
+	{
+		info = _getenv("OLDPWD");
+		if (!info)
+		{
+			write(STDERR_FILENO, "cd: OLDPWD not set.\n", 20);
+			return (0);
+		}
+		write(STDOUT_FILENO, info, _strlen(info));
+		write(STDOUT_FILENO, "\n", 1);
+		if (chdir(info) != 0 || !getcwd(prev_dir, sizeof(prev_dir)))
+		{
+			perror("chdir");
+			return (0);
+		}
+	}
+	else
+	{
+		if (!getcwd(prev_dir, sizeof(prev_dir)) || chdir(arguments[1]) != 0)
+		{
+			perror("cd");
+			return (0);
+		}
+		setenv("OLDPWD", prev_dir, 1);
+	}
+	setenv("PWD", arguments[1], 1);
+	return (1);
 }
 
 

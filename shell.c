@@ -7,7 +7,6 @@
  */
 int main(int ac, char **argv)
 {
-	size_t bytes;
 	ssize_t bytes_read;
 	char **arguments;
 	char *input, *prompt, *command, *end, *savedptr;

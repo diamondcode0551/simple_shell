@@ -7,7 +7,7 @@
 ssize_t _getline(char **input)
 {
 	static char buffer[BUFFER_SIZE];
-	ssize_t buffer_pos = 0, bytes_in_buffer = 0;
+	ssize_t i, buffer_pos = 0, bytes_in_buffer = 0;
 	ssize_t bytes_read = 0, newline_pos = -1;
 
 	if (!input)
@@ -38,7 +38,7 @@ ssize_t _getline(char **input)
 	*input = malloc(newline_pos + 1);/* Allocate memory for the line */
 	if (!*input)
 		return (-1); /* Allocation error */
-	for (ssize_t i = 0; i < newline_pos; i++)/* Copy the data from the buffer*/
+	for (i = 0; i < newline_pos; i++)/* Copy the data from the buffer*/
 		(*input)[i] = buffer[buffer_pos + i];
 	(*input)[newline_pos] = '\0'; /* Null-terminate the line */
 	buffer_pos += bytes_read + 1; /* Move buffer_pos to the next character*/
