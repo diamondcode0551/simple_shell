@@ -30,8 +30,8 @@ char *handle_path(char *command);
  */
 typedef struct builtins
 {
-        const char *name;
-        int (*function)(char **arguments);
+	const char *name;
+	int (*function)(char **arguments);
 } builtin_command;
 
 /* Function prototypes for built-in commands */
@@ -49,8 +49,8 @@ int launch(char **arguments);
  */
 typedef struct mybuiltin
 {
-        char *arguments;
-        void (*functions)(char **);
+	char *arguments;
+	void (*functions)(char **);
 } mybuiltin;
 
 /* Environment help */
