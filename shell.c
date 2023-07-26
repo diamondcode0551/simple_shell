@@ -64,7 +64,7 @@ int launch(char **arguments)
 			/*executes command using execve function*/
 			if (execve(command, arguments, NULL) == -1)
 			{
-				error = "./shell: No such file or directory";
+				error = "./shell: command not found";
 				write(STDOUT_FILENO, error, _strlen(error));
 				write(STDOUT_FILENO, "\n", 1);
 				exit(EXIT_FAILURE);

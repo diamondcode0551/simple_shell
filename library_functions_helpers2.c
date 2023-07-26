@@ -55,7 +55,7 @@ char *_strcat(char *dest, char *src)
  * _strcmp - a function that compares two strings
  * @s1: input one
  * @s2: input two
- * Return: Always 0 (Success)
+ * Return: Always 0 (Success), 1 s1 greater than s2, -1 s1 < s2
  */
 int _strcmp(const char *s1, const char *s2)
 {
@@ -66,6 +66,10 @@ int _strcmp(const char *s1, const char *s2)
 		if (s1[i] != s2[i])
 			return (s1[i] - s2[i]);
 	}
+	if (s1[i] == '\0' && s2[i] != '\0')
+		return (-1);
+	if (s1[i] != '\0' && s2[i] == '\0')
+		return (1);
 	return (0);
 }
 

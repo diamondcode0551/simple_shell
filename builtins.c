@@ -9,7 +9,7 @@ int exit_builtin(char **arguments)
 	int exit_code;
 	char *error_message;
 
-	if (arguments[0] != NULL && strcmp(arguments[0], "exit") == 0)
+	if (arguments[0] != NULL && _strcmp(arguments[0], "exit") == 0)
 	{
 		if (arguments[1] != NULL)
 		{
@@ -23,7 +23,7 @@ int exit_builtin(char **arguments)
 			exit(0);
 	}
 	error_message = "shell: command not found\n";
-	write(2, error_message, strlen(error_message));
+	write(2, error_message, _strlen(error_message));
 
 	return (1);
 }
@@ -119,9 +119,9 @@ int cd_builtin(char **arguments)
 			perror("cd");
 			return (0);
 		}
-		setenv("OLDPWD", prev_dir, 1);
+		_setenv("OLDPWD", prev_dir, 1);
 	}
-	setenv("PWD", arguments[1], 1);
+	_setenv("PWD", arguments[1], 1);
 	return (1);
 }
 

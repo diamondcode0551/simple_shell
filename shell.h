@@ -66,4 +66,18 @@ void split_commands(char *input, char **arguments);
 void execute_command(char *command, char **arguments);
 char *_strdup(char *str);
 
+
+/**
+ * struct EnvVarNode - creates a list
+ * @name: name of variable
+ * @value: value of variable
+ * @next: next on the list
+ */
+typedef struct EnvVarNode
+{
+	char *name;
+	char *value;
+	struct EnvVarNode *next;
+} EnvVarNode;
+int _setenv(char *name, char *value, int overwrite);
 #endif
