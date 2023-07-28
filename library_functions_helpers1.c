@@ -129,5 +129,3 @@ char *_concats(char *first, char *second, char *third)
 
 	return (value);
 }
-
-
